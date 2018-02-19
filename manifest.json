@@ -29,7 +29,6 @@
         "https://*.slack.com/*"
       ],
       "js": [
-        "js/jquery.min.js",
         "src/inject/inject.js"
       ]
     }

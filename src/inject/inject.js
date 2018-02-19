@@ -8,12 +8,12 @@ chrome.extension.sendMessage({}, function(response) {
 		enableExtension = false;
 
 		var is_dm_window = function(){
-			var channel_title_div = $('#channel_title')[0]
+			var channel_title_div = document.getElementById("channel_title")
 			return channel_title_div == undefined  // DMs do not have a DOM element with this ID
 		}
 
 		var get_sender_id = function(message){
-			var a=$(message).find("a.c-message__avatar")[0]
+			var a=message.querySelectorAll("a.c-message__avatar")[0]
 			if (a === undefined){
 				var prev = message.previousSibling;
 				if (prev === null){
@@ -41,13 +41,13 @@ chrome.extension.sendMessage({}, function(response) {
 		}
 
 		var handle_history = function(){
-			messages = $("div.c-virtual_list__item")
+			messages = document.querySelectorAll("div.c-virtual_list__item")
 			for (i=0; i<messages.length; i++){
 				handle_message(messages[i])
 			}
 		}
 
-		message_div = $('#messages_container') // Parent div that contains messages
+		message_div = document.getElementById("messages_container") // Parent div that contains messages
 
 		chrome.storage.sync.get({
 			blockedUsers: "",
@@ -64,8 +64,8 @@ chrome.extension.sendMessage({}, function(response) {
 
 			handle_history();
 
-			// Add function to be called everytime a new node is inserted in message_div
-			message_div.bind('DOMNodeInserted', function(event){
+			// Add function to be called every time a new node is inserted in message_div
+			message_div.addEventListener('DOMNodeInserted', function(event){
 				if (onlyBlockDMs && !is_dm_window()) {
 					return
 				}
