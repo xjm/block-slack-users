@@ -25,9 +25,57 @@ chrome.extension.sendMessage({}, function(response) {
 			return user_id;
 		}
 
+    var has_mention = function(message){
+      // Mentions have the class `.c-mrkdwn__member--mention`.
+			if ($(message).find("a.c-mrkdwn__member--mention")[0]) {
+        return true;
+      }
+      // Also check for channel broadcasts and count them as mentions.
+			if ($(message).find("span.c-mrkdwn__broadcast--mention")[0]) {
+        return true;
+      }
+    }
+
+    // @todo This is incomplete.
+/*		var get_message_to = function(message){
+			var messageTo=$(message).find("a.c-mrkdwn__member");
+			if (messageTo[0] === undefined) {
+        return;
+				var prev = message.previousSibling;
+				if (prev === null){
+					return "";
+				}
+				return get_sender_id(prev);
+
+			}
+
+      console.log("Hi");
+			for (i=0; i < messageTo.length; i++) {
+        console.log(messageTo[i]);
+        userIds.push(messageTo[i].href.substring(messageTo[i].href.lastIndexOf('/')+1));
+      };
+
+      userIds = new Array();
+      messageTo.forEach(function(element) {
+      });
+
+		}*/
+
 		var should_hide_message = function(message){
-			var senderId = get_sender_id(message)
-			return Boolean(blockedUsers.indexOf(senderId) > -1)
+			var senderId = get_sender_id(message);
+			if (Boolean(blockedUsers.indexOf(senderId) > -1)) {
+        // Don't bother checking the message text if the sender is blocked.
+        return true;
+      }
+      // Don't hide the message if it also contains a mention.
+      // @todo However, we should rewrite the message text to hide the blocked
+      // user's name.
+      if (has_mention(message)) {
+        return false;
+      }
+      // Also hide messages *to* the user unless the message has a mention.
+      // @todo Finish this.
+//      get_message_to(message);
 		}
 
 		var hide_message = function(message){
