@@ -4,6 +4,7 @@ chrome.extension.sendMessage({}, function(response) {
 		clearInterval(readyStateCheckInterval);
 
 		blockedUsers = [];
+		alsoBlockTo = true;
 		onlyBlockDMs = false;
 		enableExtension = false;
 
@@ -36,30 +37,13 @@ chrome.extension.sendMessage({}, function(response) {
       }
     }
 
-    // @todo This is incomplete.
-/*		var get_message_to = function(message){
-			var messageTo=$(message).find("a.c-mrkdwn__member");
-			if (messageTo[0] === undefined) {
-        return;
-				var prev = message.previousSibling;
-				if (prev === null){
-					return "";
-				}
-				return get_sender_id(prev);
-
-			}
-
-      console.log("Hi");
-			for (i=0; i < messageTo.length; i++) {
-        console.log(messageTo[i]);
-        userIds.push(messageTo[i].href.substring(messageTo[i].href.lastIndexOf('/')+1));
-      };
-
-      userIds = new Array();
-      messageTo.forEach(function(element) {
+	  var get_message_to = function(message){
+      var messageTo = new Array();
+      $.each($(message).find('a.c-mrkdwn__member'), (index, value) => {
+	      messageTo.push((value.href.substring(value.href.lastIndexOf('/')+1)));
       });
-
-		}*/
+      return messageTo;
+	  }
 
 		var should_hide_message = function(message){
 			var senderId = get_sender_id(message);
@@ -67,6 +51,12 @@ chrome.extension.sendMessage({}, function(response) {
         // Don't bother checking the message text if the sender is blocked.
         return true;
       }
+
+      // Don't check for mentions unless the option is enabled.
+      if (!alsoBlockTo) {
+        return false;
+      }
+
       // Don't hide the message if it also contains a mention.
       // @todo However, we should rewrite the message text to hide the blocked
       // user's name.
@@ -74,8 +64,13 @@ chrome.extension.sendMessage({}, function(response) {
         return false;
       }
       // Also hide messages *to* the user unless the message has a mention.
-      // @todo Finish this.
-//      get_message_to(message);
+      var toUsers = get_message_to(message);
+      var toBlockedUsers = toUsers.filter(function(n) {
+        return blockedUsers.indexOf(n) > -1;
+      });
+      if (toBlockedUsers.length > 0) {
+        return true;
+      }
 		}
 
 		var hide_message = function(message){
@@ -99,10 +94,12 @@ chrome.extension.sendMessage({}, function(response) {
 
 		chrome.storage.sync.get({
 			blockedUsers: "",
+			alsoBlockTo: true,
 			onlyBlockDMs: false,
 			enableExtension: true
 		}, function(items) {
 			blockedUsers = items.blockedUsers.split(',');
+			alsoBlockTo = items.alsoBlockTo;
 			onlyBlockDMs = items.onlyBlockDMs;
 			enableExtension = items.enableExtension;
 

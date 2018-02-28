@@ -11,12 +11,19 @@
 
       <form class="form-options">
       	<h2 class="form-options-heading">Configure</h2>
-
-        <input id="inputUsers" class="form-control" placeholder="Enter User/Bot IDs to Hide Messages" autofocus>
+        Inspect the user's photo in the page source and look for something like <code>href="/team/U0123ABC"</code> near the photo. <code>U0123ABC</code> is the User ID.
+        <label><b>
+          <input id="inputUsers" class="form-control" placeholder="Enter User/Bot IDs to Hide Messages" autofocus>
+        </b></label>
         <div class="checkbox">
           <label><b>
             <input type="checkbox" id="onlyBlockDMs"> Only block Direct Messages
           </b></label>
+          <label><b>
+            <input type="checkbox" id="alsoBlockTo"> Also block messages that mention blocked users
+          </b></label>
+          (Messages will still be shown if they also mention you.)
+          <br /><br />
           <label><b>
             <input type="checkbox" id="enableExtension"> Make slack a happy place!
           </b></label>
