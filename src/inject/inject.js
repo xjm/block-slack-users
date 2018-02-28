@@ -120,7 +120,7 @@ chrome.extension.sendMessage({}, function(response) {
 				// Handle new incoming messages
 				if (event_target.classList.contains("c-virtual_list__item")){
 					handle_message(event_target)
-				} 
+				}
 
 				// Handle message history loading
 				else if (event_target.classList.contains("c-virtual_list")){
