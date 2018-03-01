@@ -22,7 +22,11 @@ chrome.extension.sendMessage({}, function(response) {
     }
 
 		var get_sender_id = function(message){
-			var a=$(message).find("a.c-message__avatar")[0]
+      // Slack currently uses totally different markup and CSS in the main
+      // column versus in the thread sidebar.
+      // `.c-message__avatar` is a class on user icons in the main content.
+      // `.member_image` is a class on user icons in the sidebar.
+			var a=$(message).find("a.c-message__avatar, a.member_image")[0]
 			if (a === undefined){
 				var prev = message.previousSibling;
 				if (prev === null){
@@ -54,7 +58,10 @@ chrome.extension.sendMessage({}, function(response) {
 	  }
 
 		var should_hide_message = function(message){
+      console.log("Checking:");
+      console.log(message);
 			var senderId = get_sender_id(message);
+      console.log(senderId);
 			if (in_blocked_users(senderId)) {
         // Don't bother checking the message text if the sender is blocked.
         return true;
@@ -106,7 +113,11 @@ chrome.extension.sendMessage({}, function(response) {
     }
 
 		var handle_history = function(){
-			messages = $("div.c-virtual_list__item")
+      // Slack currently uses totally different markup and CSS in the main
+      // column versus in the thread sidebar.
+      // div.c-virtual_list__item is the main content area.
+      // ts-message.message_container_item is the sidebar.
+			messages = $("div.c-virtual_list__item, ts-message.message_container_item")
 			for (i=0; i<messages.length; i++){
 				handle_message(messages[i])
 			}
