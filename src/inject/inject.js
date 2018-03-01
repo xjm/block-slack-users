@@ -102,6 +102,7 @@ chrome.extension.sendMessage({}, function(response) {
       if (!alsoBlockTo) {
         return false;
       }
+      hide_mention(message);
     }
 
 		var handle_history = function(){
