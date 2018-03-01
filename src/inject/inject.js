@@ -93,8 +93,9 @@ chrome.extension.sendMessage({}, function(response) {
 		}
 
     var hide_mention = function(message) {
-      // Hide any mention of the user within shown messages.
-      $.each($(message).find('a.c-mrkdwn__member'), (index, value) => {
+      // Hide any mention of the user within shown messages, as well as their
+      // avatar in thread summaries within shown messages.
+      $.each($(message).find('a.c-mrkdwn__member, a.c-avatar'), (index, value) => {
         if (in_blocked_users(get_id_from_link(value))) {
 	        hide_message(value);
         }
