@@ -13,6 +13,14 @@ chrome.extension.sendMessage({}, function(response) {
 			return channel_title_div == undefined  // DMs do not have a DOM element with this ID
 		}
 
+    var in_blocked_users = function(senderId) {
+      return Boolean(blockedUsers.indexOf(senderId) > -1);
+    }
+
+    var get_id_from_link = function(link) {
+      return link.href.substring(link.href.lastIndexOf('/')+1);
+    }
+
 		var get_sender_id = function(message){
 			var a=$(message).find("a.c-message__avatar")[0]
 			if (a === undefined){
@@ -22,7 +30,7 @@ chrome.extension.sendMessage({}, function(response) {
 				}
 				return get_sender_id(prev);
 			}
-			var user_id = a.href.substring(a.href.lastIndexOf('/')+1);
+			var user_id = get_id_from_link(a);
 			return user_id;
 		}
 
@@ -40,14 +48,14 @@ chrome.extension.sendMessage({}, function(response) {
 	  var get_message_to = function(message){
       var messageTo = new Array();
       $.each($(message).find('a.c-mrkdwn__member'), (index, value) => {
-	      messageTo.push((value.href.substring(value.href.lastIndexOf('/')+1)));
+	      messageTo.push(get_id_from_link(value));
       });
       return messageTo;
 	  }
 
 		var should_hide_message = function(message){
 			var senderId = get_sender_id(message);
-			if (Boolean(blockedUsers.indexOf(senderId) > -1)) {
+			if (in_blocked_users(senderId)) {
         // Don't bother checking the message text if the sender is blocked.
         return true;
       }
@@ -65,8 +73,8 @@ chrome.extension.sendMessage({}, function(response) {
       }
       // Also hide messages *to* the user unless the message has a mention.
       var toUsers = get_message_to(message);
-      var toBlockedUsers = toUsers.filter(function(n) {
-        return blockedUsers.indexOf(n) > -1;
+      var toBlockedUsers = toUsers.filter(function(to_user_id) {
+        return in_blocked_users(to_user_id);
       });
       if (toBlockedUsers.length > 0) {
         return true;
