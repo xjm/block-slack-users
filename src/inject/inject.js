@@ -85,11 +85,24 @@ chrome.extension.sendMessage({}, function(response) {
 			message.style.display = "none";
 		}
 
+    var hide_mention = function(message) {
+      // Hide any mention of the user within shown messages.
+      $.each($(message).find('a.c-mrkdwn__member'), (index, value) => {
+        if (in_blocked_users(get_id_from_link(value))) {
+	        hide_message(value);
+        }
+      });
+    }
 		var handle_message = function(message){
 			if (should_hide_message(message)){
 				hide_message(message)
 			}
-		}
+
+      // Don't check for mentions unless the option is enabled.
+      if (!alsoBlockTo) {
+        return false;
+      }
+    }
 
 		var handle_history = function(){
 			messages = $("div.c-virtual_list__item")
