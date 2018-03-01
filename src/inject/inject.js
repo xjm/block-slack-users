@@ -58,10 +58,7 @@ chrome.extension.sendMessage({}, function(response) {
 	  }
 
 		var should_hide_message = function(message){
-      console.log("Checking:");
-      console.log(message);
 			var senderId = get_sender_id(message);
-      console.log(senderId);
 			if (in_blocked_users(senderId)) {
         // Don't bother checking the message text if the sender is blocked.
         return true;
