@@ -44,16 +44,18 @@ chrome.extension.sendMessage({}, function(response) {
         return true;
       }
       // Also check for channel broadcasts and count them as mentions.
-			if ($(message).find("span.c-mrkdwn__broadcast--mention")[0]) {
+			if (message.querySelectorAll("span.c-mrkdwn__broadcast--mention")[0]) {
         return true;
       }
     }
 
-	  var get_message_to = function(message){
+	  var get_message_to = (message) => {
       var messageTo = new Array();
-      $.each(message.querySelectorAll('a.c-mrkdwn__member'), (index, value) => {
-	      messageTo.push(get_id_from_link(value));
-      });
+      [].forEach.call(
+        message.querySelectorAll('a.c-mrkdwn__member'),
+        (value) => {
+	        messageTo.push(get_id_from_link(value));
+        });
       return messageTo;
 	  }
 
@@ -89,13 +91,15 @@ chrome.extension.sendMessage({}, function(response) {
 			message.style.display = "none";
 		}
 
-    var hide_mention = function(message) {
+    var hide_mention = (message) => {
       // Hide any mention of the user within shown messages, as well as their
       // avatar in thread summaries within shown messages.
-      $.each(message.querySelectorAll('a.c-mrkdwn__member, a.c-avatar'), (index, value) => {
-        if (in_blocked_users(get_id_from_link(value))) {
-	        hide_message(value);
-        }
+      [].forEach.call(
+        message.querySelectorAll('a.c-mrkdwn__member, a.c-avatar'),
+        (value) => {
+          if (in_blocked_users(get_id_from_link(value))) {
+	          hide_message(value);
+          }
       });
     }
 		var handle_message = function(message){
