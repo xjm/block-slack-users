@@ -6,7 +6,6 @@ chrome.extension.sendMessage({}, function(response) {
 		blockedUsers = [];
 		alsoBlockTo = true;
 		onlyBlockDMs = false;
-		enableExtension = false;
 
 		var is_dm_window = function(){
 			var channel_title_div = document.getElementById("channel_title")
@@ -133,16 +132,10 @@ chrome.extension.sendMessage({}, function(response) {
 			blockedUsers: "",
 			alsoBlockTo: true,
 			onlyBlockDMs: false,
-			enableExtension: true
 		}, function(items) {
 			blockedUsers = items.blockedUsers.split(',');
 			alsoBlockTo = items.alsoBlockTo;
 			onlyBlockDMs = items.onlyBlockDMs;
-			enableExtension = items.enableExtension;
-
-			if (enableExtension == false){
-				return
-			}
 
 			handle_history();
 
