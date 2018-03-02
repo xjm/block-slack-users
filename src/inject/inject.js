@@ -40,7 +40,7 @@ chrome.extension.sendMessage({}, function(response) {
 
     var has_mention = function(message){
       // Mentions have the class `.c-mrkdwn__member--mention`.
-			if ($(message).find("a.c-mrkdwn__member--mention")[0]) {
+			if (message.querySelectorAll("a.c-mrkdwn__member--mention")[0]) {
         return true;
       }
       // Also check for channel broadcasts and count them as mentions.
@@ -51,7 +51,7 @@ chrome.extension.sendMessage({}, function(response) {
 
 	  var get_message_to = function(message){
       var messageTo = new Array();
-      $.each($(message).find('a.c-mrkdwn__member'), (index, value) => {
+      $.each(message.querySelectorAll('a.c-mrkdwn__member'), (index, value) => {
 	      messageTo.push(get_id_from_link(value));
       });
       return messageTo;
@@ -92,7 +92,7 @@ chrome.extension.sendMessage({}, function(response) {
     var hide_mention = function(message) {
       // Hide any mention of the user within shown messages, as well as their
       // avatar in thread summaries within shown messages.
-      $.each($(message).find('a.c-mrkdwn__member, a.c-avatar'), (index, value) => {
+      $.each(message.querySelectorAll('a.c-mrkdwn__member, a.c-avatar'), (index, value) => {
         if (in_blocked_users(get_id_from_link(value))) {
 	        hide_message(value);
         }
