@@ -10,6 +10,7 @@ Clone the repo, go to chrome://extensions, enable developer mode, then load this
 1. Hide messages from any User
 2. Hide messages from any bot
 3. Optionally allow messages to be hidden only from DMs
+4. Optionally hide messages to the user and mentions of the user's name in messages to you
 
 ## How To Use:
 1. Click on the extension icon or navigate to extension options.
