@@ -11,8 +11,17 @@
 
       <form class="form-options">
       	<h2 class="form-options-heading">Configure</h2>
+        <label><b>
+          Member IDs, separated by commas
+          <input id="inputUsers" class="form-control" placeholder="Enter User/Bot IDs to Hide Messages" autofocus>
+        </b></label>
+        <p>To find a member ID:</p>
+        <ol>
+          <li>Click the member's photo in the Slack UI.</li>
+          <li>Click again on the enlarged photo to open it in the sidebar.</li>
+          <li>Click the down arrow ("More actions") button and select "Copy member ID".</li>
+          </ol>
 
-        <input id="inputUsers" class="form-control" placeholder="Enter User/Bot IDs to Hide Messages" autofocus>
         <div class="checkbox">
           <label><b>
             <input type="checkbox" id="onlyBlockDMs"> Only block Direct Messages
