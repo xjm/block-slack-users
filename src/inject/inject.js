@@ -126,6 +126,8 @@ chrome.extension.sendMessage({}, function(response) {
 		}
 
 		message_div = document.getElementById("messages_container") // Parent div that contains messages
+    // Wrapper that contains threads in the side panel.
+		thread_div = document.getElementById("convo_container");
 
 		chrome.storage.sync.get({
 			blockedUsers: "",
@@ -162,7 +164,11 @@ chrome.extension.sendMessage({}, function(response) {
 					handle_history();
 				}
 
-			})
+			});
+			thread_div.addEventListener('DOMNodeInserted', function(event){
+        event_target = event.target;
+        handle_history();
+			});
 		});
 	}
 	}, 10);
