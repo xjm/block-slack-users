@@ -94,7 +94,7 @@ chrome.extension.sendMessage({}, function(response) {
 			// Hide any mention of the user within shown messages, as well as their
 			// avatar in thread summaries within shown messages.
 			[].forEach.call(
-				message.querySelectorAll('a.c-mrkdwn__member, a.c-avatar'),
+				message.querySelectorAll('a.c-member_slug, a.c-avatar'),
 				(value) => {
 					if (in_blocked_users(get_id_from_link(value))) {
 						hide_message(value);
