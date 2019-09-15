@@ -124,8 +124,7 @@ chrome.extension.sendMessage({}, function(response) {
       }
 
       message_div = document.querySelectorAll("div.c-message_list")[0];
-//      all_the_things = document.querySelectorAll(".p-client_container")[0];
-//      console.warn(all_the_things);
+
       // Wrapper that contains threads in the side panel.
       thread_div = document.getElementById("convo_container");
 
