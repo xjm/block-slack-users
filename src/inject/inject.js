@@ -5,7 +5,6 @@ chrome.extension.sendMessage({}, function(response) {
 
       blockedUsers = [];
       alsoBlockTo = true;
-      onlyBlockDMs = false;
 
       var is_dm_window = function(){
 	var channel_title_div = document.getElementById("channel_title")
@@ -124,26 +123,23 @@ chrome.extension.sendMessage({}, function(response) {
 	}
       }
 
-      message_div = document.getElementById("messages_container") // Parent div that contains messages
+      message_div = document.querySelectorAll("div.c-message_list")[0];
+//      all_the_things = document.querySelectorAll(".p-client_container")[0];
+//      console.warn(all_the_things);
       // Wrapper that contains threads in the side panel.
       thread_div = document.getElementById("convo_container");
 
       chrome.storage.sync.get({
 	blockedUsers: "",
 	alsoBlockTo: true,
-	onlyBlockDMs: false,
       }, function(items) {
 	blockedUsers = items.blockedUsers.split(',');
 	alsoBlockTo = items.alsoBlockTo;
-	onlyBlockDMs = items.onlyBlockDMs;
 
 	handle_history();
 
 	// Add function to be called every time a new node is inserted in message_div
 	message_div.addEventListener('DOMNodeInserted', function(event){
-	  if (onlyBlockDMs && !is_dm_window()) {
-	    return
-	  }
 
 	  event_target = event.target;
 
